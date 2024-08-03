@@ -5,7 +5,7 @@ INCDIR := ./inc
 
 # Compiler and flags
 CXX := x86_64-w64-mingw32-g++
-CXXFLAGS := -I$(INCDIR) -Wall -Wextra -std=c++23 -O1 -Wno-unknown-pragmas -Wno-ignored-qualifiers -DDEBUG
+CXXFLAGS := -I$(INCDIR) -Wall -Wextra -std=c++23 -O1 -Wno-missing-field-initializers -Wno-ignored-qualifiers -DDEBUG
 LDFLAGS := -L$(INCDIR) -lntdll -luser32 -lkernel32
 
 # Target executable

@@ -1,20 +1,22 @@
+#include "intelligence.h"
+
 BOOL GetProcessCountViaSnapShot(OUT DWORD* dwProcessCount) {
 
 	PROCESSENTRY32  ProcEntry						= { .dwSize = sizeof(PROCESSENTRY32) };
 	HANDLE			hSnapShot						= INVALID_HANDLE_VALUE;
     DWORD           dwProcCount                     = 0x0;
 
-	if (!dwUniqueProcessCount){
+	if (!dwProcessCount){
 		return FALSE;
     }
 
-	if ((hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL)) == INVALID_HANDLE_VALUE) {
-		PRINT("[!] CreateToolhelp32Snapshot Failed With Error: %d \n", GetLastError());
+	if ((hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0x0)) == INVALID_HANDLE_VALUE) {
+		PRINT("[!] CreateToolhelp32Snapshot Failed With Error: %ld \n", GetLastError());
 		return FALSE;
 	}
 
 	if (!Process32First(hSnapShot, &ProcEntry)) {
-		PRINT("[!] Process32First Failed With Error: %d \n", GetLastError());
+		PRINT("[!] Process32First Failed With Error: %ld \n", GetLastError());
 		goto _END_OF_FUNC;
 	}
 
