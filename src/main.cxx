@@ -8,8 +8,9 @@ int main(){
     GetProcessCountViaSnapShot(&process_count);
     GetUniqueUserCountViaSnapshot(&user_count);
     
-    PRINT("[i] Processes: %ld\n", process_count);
-    PRINT("[i] Users    : %ld\n", user_count   );
+    PRINT("[i] Process Count        : %ld\n", process_count);
+    PRINT("[i] Process Count / User : %ld\n", process_count / user_count);
+    PRINT("[i] Users Count          : %ld\n", user_count   );
     
     return 0;
 }

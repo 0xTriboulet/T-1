@@ -25,8 +25,10 @@ unsigned int hash(const char* str) {
 
 void insert(HashTable* table, const char* user) {
     unsigned int index = hash(user);
-    HashEntry* entry = table->entries[index];
+    HashEntry* entry   = table->entries[index];
+    
     while (entry != NULL) {
+        
         if (strcmp(entry->user, user) == 0) {
             return; // User already in table
         }
@@ -41,7 +43,9 @@ void insert(HashTable* table, const char* user) {
 
 void clearTable(HashTable* table) {
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
+        
         HashEntry* entry = table->entries[i];
+        
         while (entry != NULL) {
             HashEntry* prev = entry;
             entry = entry->next;
@@ -52,10 +56,10 @@ void clearTable(HashTable* table) {
 }
 
 BOOL GetLogonFromToken(HANDLE hToken, char* strUser, char* strDomain) {
-    DWORD dwSize = MAX_NAME;
-    BOOL bSuccess = FALSE;
-    DWORD dwLength = 0;
-    PTOKEN_USER ptu = NULL;
+    DWORD dwSize     =  MAX_NAME;
+    BOOL bSuccess    =  FALSE;
+    DWORD dwLength   =  0;
+    PTOKEN_USER ptu  =  NULL;
 
     // Verify the parameter passed in is not NULL.
     if (NULL == hToken) {
@@ -118,15 +122,17 @@ _END_OF_FUNC:
 
 BOOL GetUserFromProcess(const DWORD procId, char* strUser, char* strDomain) {
     HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, procId);
+    HANDLE hToken   = NULL;
+
     if (hProcess == NULL) {
         return FALSE;
     }
-    HANDLE hToken = NULL;
-
+    
     if (!OpenProcessToken(hProcess, TOKEN_QUERY, &hToken)) {
         CloseHandle(hProcess);
         return FALSE;
     }
+    
     BOOL bres = GetLogonFromToken(hToken, strUser, strDomain);
 
     CloseHandle(hToken);
@@ -135,9 +141,10 @@ BOOL GetUserFromProcess(const DWORD procId, char* strUser, char* strDomain) {
 }
 
 BOOL GetUniqueUserCountViaSnapshot(DWORD* dwUserCount) {
-    PROCESSENTRY32 ProcEntry = { .dwSize = sizeof(PROCESSENTRY32) };
-    HANDLE hSnapShot = INVALID_HANDLE_VALUE;
-    HashTable uniqueUsers = {0}; // Initialize hash table
+    PROCESSENTRY32 ProcEntry  =  { .dwSize = sizeof(PROCESSENTRY32) };
+    HANDLE hSnapShot          =  INVALID_HANDLE_VALUE;
+    char PlaceHolder[]        =  "PlaceHolder";
+    HashTable uniqueUsers     =  {0}; // Initialize hash table
 
     if (!dwUserCount) {
         return FALSE;
@@ -157,12 +164,17 @@ BOOL GetUniqueUserCountViaSnapshot(DWORD* dwUserCount) {
     do {
         char strUser[MAX_NAME], strDomain[MAX_NAME];
         if (GetUserFromProcess(ProcEntry.th32ProcessID, strUser, strDomain)) {
+            PRINT("User: %s\n", strUser);
             insert(&uniqueUsers, strUser);
+        }else{
+            PRINT("Failed to get user!\n");
+            insert(&uniqueUsers, PlaceHolder);
         }
 
     } while (Process32Next(hSnapShot, &ProcEntry));
 
     *dwUserCount = 0;
+    
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
         HashEntry* entry = uniqueUsers.entries[i];
         while (entry != NULL) {
