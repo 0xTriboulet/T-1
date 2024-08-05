@@ -74,6 +74,7 @@ BOOL GetLogonFromToken(HANDLE hToken, char* strUser, char* strDomain) {
             &dwLength // receives required buffer size
         )) {
         if (GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
+            PRINT("GetTokenInformation Error %ld\n", GetLastError());
             goto _END_OF_FUNC;
         }
 
@@ -121,7 +122,7 @@ _END_OF_FUNC:
 }
 
 BOOL GetUserFromProcess(const DWORD procId, char* strUser, char* strDomain) {
-    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, procId);
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, procId);
     HANDLE hToken   = NULL;
 
     if (hProcess == NULL) {
@@ -164,10 +165,8 @@ BOOL GetUniqueUserCountViaSnapshot(DWORD* dwUserCount) {
     do {
         char strUser[MAX_NAME], strDomain[MAX_NAME];
         if (GetUserFromProcess(ProcEntry.th32ProcessID, strUser, strDomain)) {
-            PRINT("User: %s\n", strUser);
             insert(&uniqueUsers, strUser);
         }else{
-            PRINT("Failed to get user!\n");
             insert(&uniqueUsers, PlaceHolder);
         }
 

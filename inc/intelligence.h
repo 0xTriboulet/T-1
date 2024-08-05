@@ -2,6 +2,8 @@
 #include <windows.h>
 #include <tlhelp32.h>
 #include <comdef.h>
+#include <comutil.h>
+#include <wbemidl.h>
 #include <string.h>
 
 #define MemCopy         __builtin_memcpy

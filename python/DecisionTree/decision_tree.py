@@ -9,7 +9,7 @@ from sklearn.tree import plot_tree
 # Define the file path
 CSV_FILE = './dataset/process_data.csv'
 
-MIN_DATASET_SIZE = 50
+MIN_DATASET_SIZE = 100
 
 
 class BadDecisionTree:
@@ -22,6 +22,8 @@ class BadDecisionTree:
             'min_samples_split': np.arange(2, 10).astype(np.uint64),
             'criterion': ["gini", "entropy"],
             'splitter': ["best", "random"],
+            'class_weight': ["balanced", None],
+            'ccp_alpha': np.arange(0, 1, 0.01).astype(np.float64),
         }
 
         self.data = df
@@ -37,7 +39,7 @@ class BadDecisionTree:
 
     def tune_hyperparameters(self) -> None:
         # Number of iteration for RandomizedSearchCV
-        n_iter_search = 20
+        n_iter_search = 1000
         # Setting up the Randomized Search with cross validation
         self.best_model = RandomizedSearchCV(self.model, param_distributions=self.hyperparams,
                                              n_iter=n_iter_search, cv=5)
@@ -48,13 +50,16 @@ class BadDecisionTree:
     def visualize_tree(self, filename: str):
         # Check if best_model is not None and if it's been fit
         if self.best_model and hasattr(self.best_model, 'best_estimator_'):
-            # Initialize the figure size
-            plt.figure(figsize=(100, 60), dpi=100)  # increase figure size and dpi
+            plt.figure(figsize=(5, 3), dpi=100)  # increase figure size and dpi
+
             # Use plot_tree from sklearn.tree to visualize the tree
             plot_tree(self.best_model.best_estimator_,
                       feature_names=self.X.columns,
                       class_names=True,
+                      rounded=True,
+                      fontsize=10,
                       filled=True)
+
             # Save the tree
             plt.savefig(filename)
         else:
