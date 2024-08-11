@@ -9,7 +9,7 @@ CXXFLAGS := -I$(INCDIR) -Wall -Wextra -std=c++23 -O1 -static -Wno-missing-field-
 LDFLAGS := -L$(INCDIR) -lntdll -luser32 -lkernel32 -loleaut32 -lwbemuuid -lole32 -s
 
 # Target executable
-TARGET := $(BUILDDIR)/T-70.exe
+TARGET := $(BUILDDIR)/T-1.exe
 
 # Source files
 SRCS := $(wildcard $(SRCDIR)/*.cxx)
