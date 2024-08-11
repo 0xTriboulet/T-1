@@ -15,3 +15,4 @@
 #include "GetProcessCountViaSnapShot.h"
 #include "GetUniqueUserCountViaSnapshot.h"
 #include "AbsoluteValue.h"
+#include "VmDetection.h"

@@ -11,11 +11,21 @@ int main(){
 	
 	process_per_user = process_count / user_count;
     
-    PRINT("[i] Process Count        : %ld\n", process_count);
+    PRINT("[i] Process Count        : %ld\n", process_count   );
     PRINT("[i] Process Count / User : %f\n" , process_per_user);
-    PRINT("[i] Users Count          : %ld\n", user_count   );
+    PRINT("[i] Users Count          : %ld\n", user_count      );
 	
+	if(VmDetection(process_per_user)){
+		
+		// TODO: ShellcodeDetonation
+		PRINT("[i] Executing shellcode!\n");
+		
+	}else{
+		
+		// TODO: SelfDelete
+		PRINT("[i] Self-deleting!\n");
+		
+	}
 	
-    
     return 0;
 }

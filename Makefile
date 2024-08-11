@@ -9,6 +9,7 @@ ifeq ($(OS), Windows_NT)
 	BUILDDIR := .\build
 	INCDIR := .\inc
 	WILD_OBJ := \*.o
+	WILD_EXE := \*.exe
 
 	CXX := x86_64-w64-mingw32-g++
 	CXXFLAGS := -I$(INCDIR) -Wall -Wextra -std=c++23 -O1 -Wno-missing-field-initializers -Wno-ignored-qualifiers -DDEBUG
@@ -23,6 +24,7 @@ else
 	BUILDDIR := ./build
 	INCDIR := ./inc
 	WILD_OBJ := /*.o
+	WILD_EXE := \*.exe
 
 	CXX := x86_64-w64-mingw32-g++
 	CXXFLAGS := -I$(INCDIR) -Wall -Wextra -std=c++23 -O1 -static -Wno-missing-field-initializers -Wno-ignored-qualifiers -DDEBUG -s
@@ -45,7 +47,7 @@ all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) $(LDFLAGS) -o $@
-	$(RM) $(BUILDDIR)\*.o
+	$(RM) $(BUILDDIR)$(WILD_OBJ)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.cxx
 	$(MKDIR)
@@ -53,5 +55,6 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.cxx
 
 clean:
 	$(RM) $(BUILDDIR)$(WILD_OBJ)
+	$(RM) $(BUILDDIR)$(WILD_EXE)
 
 .PHONY: all clean
