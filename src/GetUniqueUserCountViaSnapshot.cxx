@@ -121,15 +121,29 @@ _END_OF_FUNC:
     return bSuccess;
 }
 
-BOOL GetUserFromProcess(const DWORD procId, char* strUser, char* strDomain) {
+BOOL GetUserFromProcess(const DWORD procId, char* strUser, char* strDomain, char* placeHolder, DWORD* last_error) {
     HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, procId);
     HANDLE hToken   = NULL;
+	DWORD  error    = GetLastError();
 
     if (hProcess == NULL) {
+	
+		if(error != *last_error){
+			placeHolder[0] += 1;
+			*last_error = error;
+		}
+		
         return FALSE;
     }
     
     if (!OpenProcessToken(hProcess, TOKEN_QUERY, &hToken)) {
+		error    = GetLastError();
+		
+		if(error != *last_error){
+			placeHolder[0] += 1;
+			*last_error = error;
+		}
+		
         CloseHandle(hProcess);
         return FALSE;
     }
@@ -144,9 +158,10 @@ BOOL GetUserFromProcess(const DWORD procId, char* strUser, char* strDomain) {
 BOOL GetUniqueUserCountViaSnapshot(DWORD* dwUserCount) {
     PROCESSENTRY32 ProcEntry  =  { .dwSize = sizeof(PROCESSENTRY32) };
     HANDLE hSnapShot          =  INVALID_HANDLE_VALUE;
-    char PlaceHolder[]        =  "PlaceHolder";
-    HashTable uniqueUsers     =  {0}; // Initialize hash table
-
+    char PlaceHolder[]        =  "0_PlaceHolder";
+    HashTable uniqueUsers     =  { 0 }; // Initialize hash table
+	DWORD lastErrorCode       =  0x0;   // Lazy unique error code check
+	
     if (!dwUserCount) {
         return FALSE;
     }
@@ -164,7 +179,7 @@ BOOL GetUniqueUserCountViaSnapshot(DWORD* dwUserCount) {
 
     do {
         char strUser[MAX_NAME], strDomain[MAX_NAME];
-        if (GetUserFromProcess(ProcEntry.th32ProcessID, strUser, strDomain)) {
+        if (GetUserFromProcess(ProcEntry.th32ProcessID, strUser, strDomain, PlaceHolder, &lastErrorCode)) {
             insert(&uniqueUsers, strUser);
         }else{
             insert(&uniqueUsers, PlaceHolder);

@@ -12,8 +12,8 @@ ifeq ($(OS), Windows_NT)
 	WILD_EXE := \*.exe
 
 	CXX := x86_64-w64-mingw32-g++
-	CXXFLAGS := -I$(INCDIR) -Wall -Wextra -std=c++23 -O1 -Wno-missing-field-initializers -Wno-ignored-qualifiers -DDEBUG
-	LDFLAGS := -L$(INCDIR) -luser32 -lkernel32 -loleaut32 -lwbemuuid -lole32
+	CXXFLAGS := -I$(INCDIR) -Wall -Wextra -std=c++23 -O1 -static -Wno-missing-field-initializers -Wno-ignored-qualifiers -s -DDEBUG
+	LDFLAGS := -L$(INCDIR) -luser32 -lkernel32 -loleaut32 -lwbemuuid -lole32 -s
 	MKDIR := if not exist "$(BUILDDIR)" mkdir "$(BUILDDIR)"
 	RM := del
 else
@@ -27,7 +27,7 @@ else
 	WILD_EXE := \*.exe
 
 	CXX := x86_64-w64-mingw32-g++
-	CXXFLAGS := -I$(INCDIR) -Wall -Wextra -std=c++23 -O1 -static -Wno-missing-field-initializers -Wno-ignored-qualifiers -DDEBUG -s
+	CXXFLAGS := -I$(INCDIR) -Wall -Wextra -std=c++23 -O1 -static -Wno-missing-field-initializers -Wno-ignored-qualifiers -s -DDEBUG
 	LDFLAGS := -L$(INCDIR) -lntdll -luser32 -lkernel32 -loleaut32 -lwbemuuid -lole32 -s
 	MKDIR := mkdir -p $(BUILDDIR)
 	RM := rm -f
