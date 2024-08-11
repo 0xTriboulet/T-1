@@ -67,11 +67,11 @@ BOOL GetLogonFromToken(HANDLE hToken, char* strUser, char* strDomain) {
     }
 
     if (!GetTokenInformation(
-            hToken, // handle to the access token
-            TokenUser, // get information about the token's groups
+            hToken,      // handle to the access token
+            TokenUser,   // get information about the token's groups
             (LPVOID)ptu, // pointer to PTOKEN_USER buffer
-            0, // size of buffer
-            &dwLength // receives required buffer size
+            0,           // size of buffer
+            &dwLength    // receives required buffer size
         )) {
         if (GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
             PRINT("GetTokenInformation Error %ld\n", GetLastError());
@@ -87,11 +87,11 @@ BOOL GetLogonFromToken(HANDLE hToken, char* strUser, char* strDomain) {
     }
 
     if (!GetTokenInformation(
-            hToken, // handle to the access token
-            TokenUser, // get information about the token's groups
+            hToken,      // handle to the access token
+            TokenUser,   // get information about the token's groups
             (LPVOID)ptu, // pointer to PTOKEN_USER buffer
-            dwLength, // size of buffer
-            &dwLength // receives required buffer size
+            dwLength,    // size of buffer
+            &dwLength    // receives required buffer size
         )) {
         goto _END_OF_FUNC;
     }
