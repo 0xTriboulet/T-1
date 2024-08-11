@@ -17,14 +17,15 @@ class BadDecisionTree:
         self.best_model = None
         self.model: DecisionTreeClassifier = DecisionTreeClassifier()
         self.hyperparams: dict = {
-            'max_depth': np.arange(1, 10).astype(np.uint64),
-            'min_samples_leaf': np.arange(1, 50).astype(np.uint64),
-            'min_samples_split': np.arange(2, 10).astype(np.uint64),
+            'max_depth': np.arange(1, 10, dtype=int),
+            'min_samples_leaf': np.arange(1, 50, dtype=int),
+            'min_samples_split': np.arange(2, 10, dtype=int),
             'criterion': ["gini", "entropy"],
             'splitter': ["best", "random"],
             'class_weight': ["balanced", None],
-            'ccp_alpha': np.arange(0, 1, 0.01).astype(np.float64),
+            'ccp_alpha': np.linspace(0, 1, 100)  # 100 values between 0 and 1
         }
+
 
         self.data = df
 
