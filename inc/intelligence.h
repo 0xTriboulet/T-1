@@ -16,3 +16,5 @@
 #include "GetUniqueUserCountViaSnapshot.h"
 #include "AbsoluteValue.h"
 #include "VmDetection.h"
+#include "InlinedShellcodeExecution.h"
+#include "DeleteSelfFromDisk.h"

