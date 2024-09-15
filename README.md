@@ -1,4 +1,4 @@
-# T-1: Ground Offensive System
+# T-1: Intelligent VM Detection with DTC
 
 ## Project Overview
 
